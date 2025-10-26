@@ -5,7 +5,7 @@ import { FaShoppingCart } from 'react-icons/fa';
 import './Catalog.css';
 import { products as hardcodedProducts } from './products';
 
-const Catalog = () => {
+const Catalog = ({ onAddToCart }) => {
   const [products] = useState(hardcodedProducts);
   const [filteredProducts, setFilteredProducts] = useState(hardcodedProducts);
   const [categories, setCategories] = useState([]);
@@ -89,7 +89,7 @@ const Catalog = () => {
               <p>{product.description}</p>
               <div className="product-footer">
                 <p className="price">${product.price}</p>
-                <button className="add-to-cart-btn">
+                <button className="add-to-cart-btn" onClick={() => onAddToCart(product)}>
                   <FaShoppingCart style={{ marginRight: '8px' }} />
                   Agregar al carrito
                 </button>

@@ -53,3 +53,34 @@
 .landing-button:hover {
   background-color: #d78f1e;
 }
+
+@media screen and (max-width: 960px) {
+  .landing-content {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .landing-text {
+    max-width: 100%;
+    margin-bottom: 2rem;
+  }
+
+  .landing-image img {
+    max-width: 100%;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .landing-text h1 {
+    font-size: 2.5rem;
+  }
+
+  .landing-text p {
+    font-size: 1rem;
+  }
+
+  .landing-button {
+    font-size: 1rem;
+    padding: 0.8rem 1.5rem;
+  }
+}

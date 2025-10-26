@@ -93,7 +93,20 @@
     flex-direction: column;
   }
 
+  .footer-link-items {
+    align-items: center;
+    text-align: center;
+  }
+
   .footer-bottom {
     flex-direction: column;
+  }
+
+  .social-logo {
+    margin-bottom: 1rem;
+  }
+
+  .social-icons {
+    margin-bottom: 1rem;
   }
 }

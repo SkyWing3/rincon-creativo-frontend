@@ -150,3 +150,63 @@
 .add-to-cart-btn:hover {
   background: #d78f1e;
 }
+
+@media screen and (max-width: 768px) {
+  .controls-container {
+    flex-direction: column;
+  }
+
+  .filter-container {
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+  }
+
+  .search-sort-container {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .search-input {
+    width: 60%;
+  }
+
+  .sort-select {
+    width: 35%;
+  }
+
+  .products-container {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 2rem;
+  }
+
+  .catalog-title h2 {
+    font-size: 2.5rem;
+  }
+
+  .catalog-title p {
+    font-size: 1rem;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .filter-container button {
+    margin: 0.5rem;
+  }
+
+  .products-container {
+    grid-template-columns: 1fr;
+  }
+
+  .product-info h3 {
+    font-size: 1.2rem;
+  }
+
+  .price {
+    font-size: 1.1rem;
+  }
+
+  .add-to-cart-btn {
+    font-size: 0.9rem;
+    padding: 0.6rem 1rem;
+  }
+}
