@@ -58,27 +58,27 @@
   color: #e89a1f;
 }
 
-.sidedrawer__button {
+.sidedrawer__links .sidedrawer__button {
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 1rem;
   border-radius: 10px;
-  color: #fff;
   font-weight: bold;
   text-decoration: none;
   transition: background-color 0.3s ease;
+  background-color: #f0f0f0;
 }
 
-.sidedrawer__button.cart {
-  background-color: #e89a1f;
+.sidedrawer__links .sidedrawer__button.cart {
+  color: #e89a1f;
 }
 
-.sidedrawer__button.profile {
-  background-color: #333;
+.sidedrawer__links .sidedrawer__button.profile {
+  color: #333;
 }
 
-.sidedrawer__button:hover {
+.sidedrawer__links .sidedrawer__button:hover {
   opacity: 0.9;
 }
 
