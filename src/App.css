@@ -3,6 +3,8 @@
   flex: 1;
 }
 
+@import url('./dark-mode.css');
+
 .App-logo {
   height: 40vmin;
   pointer-events: none;

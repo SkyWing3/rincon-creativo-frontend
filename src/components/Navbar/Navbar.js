@@ -1,14 +1,16 @@
 
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
-import { FaBars, FaUser, FaShoppingBag } from 'react-icons/fa';
+import { FaBars, FaUser, FaShoppingBag, FaSun, FaMoon } from 'react-icons/fa';
 import logo from '../../logo.svg';
 import './Navbar.css';
 import SideDrawer from '../SideDrawer/SideDrawer';
 import Backdrop from '../Backdrop/Backdrop';
+import { ThemeContext } from '../../context/ThemeContext';
 
 const Navbar = ({ cartItemCount }) => {
   const [sideDrawerOpen, setSideDrawerOpen] = useState(false);
+  const { isDarkMode, toggleTheme } = useContext(ThemeContext);
 
   const drawerToggleClickHandler = () => {
     setSideDrawerOpen((prevState) => !prevState);
@@ -51,6 +53,9 @@ const Navbar = ({ cartItemCount }) => {
           </li>
         </ul>
         <div className="nav-icons">
+          <div className="nav-icon-link" onClick={toggleTheme}>
+            {isDarkMode ? <FaSun /> : <FaMoon />}
+          </div>
           <Link to="/cart" className="nav-icon-link">
             <FaShoppingBag />
             {cartItemCount > 0 && <span className="cart-badge">{cartItemCount}</span>}
