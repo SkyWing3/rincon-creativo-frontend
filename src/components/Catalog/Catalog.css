@@ -14,11 +14,13 @@
   font-size: 3rem;
   margin-bottom: 0.5rem;
   color: #333;
+  transition: color 0.3s ease;
 }
 
 .catalog-title p {
   font-size: 1.2rem;
   color: #777;
+  transition: color 0.3s ease;
 }
 
 .controls-container {
@@ -69,6 +71,7 @@
   border: 1px solid #ddd;
   border-radius: 30px;
   font-size: 1rem;
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
 }
 
 .search-input {
@@ -86,7 +89,7 @@
   border-radius: 15px;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
   overflow: hidden;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
 }
 
 .product-card:hover {

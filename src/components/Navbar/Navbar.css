@@ -11,6 +11,7 @@
   z-index: 999;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   font-family: 'Montserrat', sans-serif;
+  transition: background-color 0.3s ease;
 }
 
 .navbar-container {
@@ -32,6 +33,7 @@
   display: flex;
   align-items: center;
   font-weight: bold;
+  transition: color 0.3s ease;
 }
 
 .navbar-icon {
@@ -59,6 +61,7 @@
   height: 100%;
   transition: all 0.2s ease-out;
   font-weight: 500;
+  transition: color 0.3s ease;
 }
 
 .nav-links:hover {
@@ -77,6 +80,7 @@
   margin-left: 1.5rem;
   transition: color 0.2s ease-out;
   position: relative;
+  transition: color 0.3s ease;
 }
 
 .cart-badge {

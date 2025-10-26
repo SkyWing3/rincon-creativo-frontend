@@ -54,6 +54,7 @@
 .about-section {
   padding: 4rem 2rem;
   background-color: #f9f9f9;
+  transition: background-color 0.3s ease;
 }
 
 .about-content {
@@ -72,6 +73,7 @@
 .about-text h2 {
   font-size: 2.5rem;
   margin-bottom: 1rem;
+  transition: color 0.3s ease;
 }
 
 .about-image {
@@ -87,11 +89,13 @@
 .featured-section {
   padding: 4rem 2rem;
   text-align: center;
+  transition: background-color 0.3s ease;
 }
 
 .featured-section h2 {
   font-size: 2.5rem;
   margin-bottom: 2rem;
+  transition: color 0.3s ease;
 }
 
 .featured-products {
@@ -108,6 +112,7 @@
   padding: 1.5rem;
   max-width: 300px;
   text-align: left;
+  transition: background-color 0.3s ease;
 }
 
 .featured-product img {
@@ -119,6 +124,7 @@
 .featured-product h3 {
   font-size: 1.5rem;
   margin-bottom: 0.5rem;
+  transition: color 0.3s ease;
 }
 
 /* Testimonials Section */
@@ -126,11 +132,13 @@
   padding: 4rem 2rem;
   background-color: #f9f9f9;
   text-align: center;
+  transition: background-color 0.3s ease;
 }
 
 .testimonials-section h2 {
   font-size: 2.5rem;
   margin-bottom: 2rem;
+  transition: color 0.3s ease;
 }
 
 .testimonials {
@@ -146,6 +154,7 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   padding: 1.5rem;
   max-width: 400px;
+  transition: background-color 0.3s ease;
 }
 
 .testimonial p {
