@@ -16,7 +16,7 @@ const ShoppingCart = ({ cartItems, onRemoveFromCart, onUpdateQuantity }) => {
               <li key={item.id} className="cart-item">
                 <div className="item-info">
                   <img src={item.image} alt={item.name} />
-                  <span>{item.name}</span>
+                  <span className="item-name">{item.name}</span>
                 </div>
                 <div className="item-details">
                   <div className="quantity-control">
@@ -25,7 +25,7 @@ const ShoppingCart = ({ cartItems, onRemoveFromCart, onUpdateQuantity }) => {
                     <button onClick={() => onUpdateQuantity(item, item.quantity + 1)}>+</button>
                   </div>
                   <span>${(item.price * item.quantity).toFixed(2)}</span>
-                  <button onClick={() => onRemoveFromCart(item)}>Eliminar</button>
+                  <button onClick={() => onRemoveFromCart(item)} className="remove-btn">Eliminar</button>
                 </div>
               </li>
             ))}

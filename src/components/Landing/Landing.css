@@ -1,86 +1,180 @@
 
 .landing-container {
+  width: 100%;
+  overflow-x: hidden;
+}
+
+/* Hero Section */
+.hero-section {
   display: flex;
   align-items: center;
   justify-content: center;
-  height: calc(100vh - 80px);
-  padding: 0 5%;
-  background-color: #f4f4f4;
+  height: 100vh;
+  background:
+    linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+    url('https://images.unsplash.com/photo-1580130379629-3321c12154a3?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80')
+      no-repeat center center/cover;
+  color: #fff;
+  text-align: center;
+  padding: 0 2rem;
 }
 
-.landing-content {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-  max-width: 1200px;
-}
-
-.landing-text {
-  max-width: 500px;
-}
-
-.landing-text h1 {
-  font-size: 3.5rem;
-  margin-bottom: 1rem;
-  color: #333;
-}
-
-.landing-text p {
-  font-size: 1.2rem;
-  margin-bottom: 2rem;
-  color: #666;
-}
-
-.landing-image img {
-  max-width: 500px;
-  border-radius: 10px;
-}
-
-.landing-button {
-  background-color: #e89a1f;
-  color: var(--white-color);
-  padding: 1rem 2rem;
-  border: none;
-  border-radius: 50px;
-  font-size: 1.2rem;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  text-transform: uppercase;
+.hero-content h1 {
+  font-size: 4rem;
   font-weight: bold;
+  margin-bottom: 1rem;
 }
 
-.landing-button:hover {
+.hero-content p {
+  font-size: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.hero-button {
+  display: inline-flex;
+  align-items: center;
+  background-color: #e89a1f;
+  color: #fff;
+  padding: 1rem 2rem;
+  border-radius: 50px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+.hero-button:hover {
   background-color: #d78f1e;
 }
 
-@media screen and (max-width: 960px) {
-  .landing-content {
-    flex-direction: column;
-    text-align: center;
-  }
-
-  .landing-text {
-    max-width: 100%;
-    margin-bottom: 2rem;
-  }
-
-  .landing-image img {
-    max-width: 100%;
-  }
+.hero-button svg {
+  margin-left: 0.5rem;
 }
 
-@media screen and (max-width: 768px) {
-  .landing-text h1 {
-    font-size: 2.5rem;
+/* About Us Section */
+.about-section {
+  padding: 4rem 2rem;
+  background-color: #f9f9f9;
+}
+
+.about-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1200px;
+  margin: 0 auto;
+  gap: 2rem;
+}
+
+.about-text {
+  flex: 1;
+}
+
+.about-text h2 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.about-image {
+  flex: 1;
+}
+
+.about-image img {
+  width: 100%;
+  border-radius: 10px;
+}
+
+/* Featured Products Section */
+.featured-section {
+  padding: 4rem 2rem;
+  text-align: center;
+}
+
+.featured-section h2 {
+  font-size: 2.5rem;
+  margin-bottom: 2rem;
+}
+
+.featured-products {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.featured-product {
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 1.5rem;
+  max-width: 300px;
+  text-align: left;
+}
+
+.featured-product img {
+  width: 100%;
+  border-radius: 10px;
+  margin-bottom: 1rem;
+}
+
+.featured-product h3 {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+/* Testimonials Section */
+.testimonials-section {
+  padding: 4rem 2rem;
+  background-color: #f9f9f9;
+  text-align: center;
+}
+
+.testimonials-section h2 {
+  font-size: 2.5rem;
+  margin-bottom: 2rem;
+}
+
+.testimonials {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.testimonial {
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 1.5rem;
+  max-width: 400px;
+}
+
+.testimonial p {
+  font-style: italic;
+  margin-bottom: 1rem;
+}
+
+.testimonial-author {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.star-icon {
+  color: #e89a1f;
+  margin-right: 0.2rem;
+}
+
+.testimonial-author span {
+  font-weight: bold;
+  margin-left: 0.5rem;
+}
+
+@media (max-width: 768px) {
+  .hero-content h1 {
+    font-size: 3rem;
   }
 
-  .landing-text p {
-    font-size: 1rem;
-  }
-
-  .landing-button {
-    font-size: 1rem;
-    padding: 0.8rem 1.5rem;
+  .about-content {
+    flex-direction: column;
   }
 }
