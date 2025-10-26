@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import { FaArrowRight, FaStar } from 'react-icons/fa';
 import './Landing.css';
 
-const Landing = () => {
+const Landing = ({ imageUrl = 'https://www.conartesanos.com/wp-content/uploads/2020/07/2.jpg' }) => {
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -36,7 +36,16 @@ const Landing = () => {
       animate="visible"
     >
       {/* Hero Section */}
-      <motion.section className="hero-section" variants={itemVariants}>
+      <motion.section
+        className="hero-section"
+        variants={itemVariants}
+        style={{
+          background: `
+            linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+            url('${imageUrl}') no-repeat center center/cover
+          `,
+        }}
+      >
         <div className="hero-content">
           <h1>Rincón Creativo</h1>
           <p>Auténtica artesanía Boliviana, hecha con el corazón.</p>

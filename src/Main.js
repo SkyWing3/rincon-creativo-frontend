@@ -81,7 +81,7 @@ function Main() {
           />
         )}
         <Routes>
-          <Route path="/" element={<Landing />} />
+          <Route path="/" element={<Landing imageUrl="https://comunidadescolar.com.bo/wp-content/uploads/2019/02/Tejidos.jpg" />} />
           <Route path="/catalog" element={<Catalog onAddToCart={handleAddToCart} />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
