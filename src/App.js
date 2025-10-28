@@ -8,6 +8,7 @@ import Profile from './components/Profile/Profile';
 import Landing from './components/Landing/Landing';
 import Catalog from './components/Catalog/Catalog';
 import ShoppingCart from './components/ShoppingCart/ShoppingCart';
+import Checkout from './components/Checkout/Checkout';
 import { AuthContext } from './context/AuthContext';
 import Footer from './components/Footer/Footer';
 import './App.css';
@@ -91,6 +92,14 @@ function App() {
                         <Route
                             path="/cart"
                             element={<ShoppingCart cartItems={cartItems} onRemoveFromCart={handleRemoveFromCart} onUpdateQuantity={handleUpdateQuantity} />}
+                        />
+                        <Route
+                            path="/checkout"
+                            element={
+                                <PrivateRoute>
+                                    <Checkout />
+                                </PrivateRoute>
+                            }
                         />
                     </Routes>
                 </div>

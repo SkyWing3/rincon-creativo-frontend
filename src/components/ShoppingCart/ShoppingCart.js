@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import './ShoppingCart.css';
 
 const ShoppingCart = ({ cartItems, onRemoveFromCart, onUpdateQuantity }) => {
@@ -32,7 +33,7 @@ const ShoppingCart = ({ cartItems, onRemoveFromCart, onUpdateQuantity }) => {
           </ul>
           <div className="cart-total">
             <h3>Total: ${total.toFixed(2)}</h3>
-            <button className="pay-btn">Pagar</button>
+            <Link to="/checkout" className="pay-btn">Finalizar Compra</Link>
           </div>
         </>
       )}

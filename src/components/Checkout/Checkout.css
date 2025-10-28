@@ -1,0 +1,125 @@
+.checkout-container {
+  padding: 2rem;
+  background-color: #f9f9f9;
+}
+
+.checkout-container h2 {
+  text-align: center;
+  margin-bottom: 2rem;
+  color: #333;
+}
+
+.checkout-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+
+.user-data, .billing-data, .cart-summary {
+  background-color: #fff;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.user-data h3, .billing-data h3, .cart-summary h3 {
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  color: #333;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 1rem;
+}
+
+.user-data p {
+  margin: 0.5rem 0;
+  color: #555;
+}
+
+.user-data p strong {
+  color: #333;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #333;
+  font-weight: bold;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.cart-summary .cart-item-summary {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  color: #555;
+}
+
+.cart-summary .cart-total-summary {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid #eee;
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #333;
+}
+
+.payment-method {
+  margin-top: 2rem;
+}
+
+.payment-method h4 {
+  margin-bottom: 1rem;
+  color: #333;
+}
+
+.binance-pay {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  background-color: #f5f5f5;
+  border-radius: 4px;
+}
+
+.binance-pay img {
+  width: 48px;
+  height: 48px;
+}
+
+.binance-pay span {
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: #333;
+}
+
+.place-order-btn {
+  display: block;
+  width: 100%;
+  padding: 1rem;
+  margin-top: 2rem;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.place-order-btn:hover {
+  background-color: #0056b3;
+}
