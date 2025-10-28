@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import './Profile.css';
 import { FaUser, FaEnvelope, FaPhone, FaMapMarkerAlt, FaCity } from 'react-icons/fa';
+import Orders from './../Orders/Orders';
 
 const Profile = () => {
   const [user, setUser] = useState({
@@ -17,6 +18,7 @@ const Profile = () => {
 
   const [isEditing, setIsEditing] = useState(false);
   const [editedUser, setEditedUser] = useState(user);
+  const [showOrders, setShowOrders] = useState(false);
 
   const handleEdit = () => {
     setEditedUser(user);
@@ -112,11 +114,15 @@ const Profile = () => {
                 <button onClick={handleCancel} className="edit-btn" style={{marginLeft: '10px', backgroundColor: '#7f8c8d'}}>Cancelar</button>
               </div>
             ) : (
-              <button onClick={handleEdit} className="edit-btn">Editar Perfil</button>
+              <>
+                <button onClick={handleEdit} className="edit-btn">Editar Perfil</button>
+                <button onClick={() => setShowOrders(true)} className="edit-btn" style={{marginLeft: '10px'}}>Mis Pedidos</button>
+              </>
             )}
           </div>
         </div>
       </div>
+      <Orders show={showOrders} onClose={() => setShowOrders(false)} />
     </div>
   );
 };

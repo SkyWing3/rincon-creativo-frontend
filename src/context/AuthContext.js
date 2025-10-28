@@ -117,10 +117,10 @@ export const AuthProvider = ({ children }) => {
         setUser(null);
         clearPersistedSession();
     };
-    
-    const register = async (name, email, password) => {
-        await authService.register(name, email, password);
-        await login(email, password);
+
+    const register = async (payload) => {
+        await authService.register(payload);
+        await login(payload.email, payload.password);
     };
 
     return (
