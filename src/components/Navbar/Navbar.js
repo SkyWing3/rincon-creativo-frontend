@@ -7,10 +7,12 @@ import './Navbar.css';
 import SideDrawer from '../SideDrawer/SideDrawer';
 import Backdrop from '../Backdrop/Backdrop';
 import { ThemeContext } from '../../context/ThemeContext';
+import { AuthContext } from '../../context/AuthContext';
 
 const Navbar = ({ cartItemCount }) => {
   const [sideDrawerOpen, setSideDrawerOpen] = useState(false);
   const { isDarkMode, toggleTheme } = useContext(ThemeContext);
+  const { user, logout } = useContext(AuthContext);
 
   const drawerToggleClickHandler = () => {
     setSideDrawerOpen((prevState) => !prevState);
@@ -41,16 +43,33 @@ const Navbar = ({ cartItemCount }) => {
               Catálogo
             </Link>
           </li>
-          <li className="nav-item">
-            <Link to="/login" className="nav-links">
-              Login
-            </Link>
-          </li>
-          <li className="nav-item">
-            <Link to="/signup" className="nav-links">
-              Signup
-            </Link>
-          </li>
+          {user ? (
+            <>
+              <li className="nav-item">
+                <Link to="/profile" className="nav-links">
+                  Profile
+                </Link>
+              </li>
+              <li className="nav-item">
+                <a href="/" onClick={logout} className="nav-links">
+                  Logout
+                </a>
+              </li>
+            </>
+          ) : (
+            <>
+              <li className="nav-item">
+                <Link to="/login" className="nav-links">
+                  Login
+                </Link>
+              </li>
+              <li className="nav-item">
+                <Link to="/register" className="nav-links">
+                  Register
+                </Link>
+              </li>
+            </>
+          )}
         </ul>
         <div className="nav-icons">
           <div className="nav-icon-link" onClick={toggleTheme}>
@@ -60,7 +79,7 @@ const Navbar = ({ cartItemCount }) => {
             <FaShoppingBag />
             {cartItemCount > 0 && <span className="cart-badge">{cartItemCount}</span>}
           </Link>
-          <Link to="/login" className="nav-icon-link">
+          <Link to={user ? "/profile" : "/login"} className="nav-icon-link">
             <FaUser />
           </Link>
         </div>
