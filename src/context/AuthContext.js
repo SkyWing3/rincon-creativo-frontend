@@ -1,36 +1,107 @@
 import React, { createContext, useState, useEffect } from 'react';
 import authService from '../services/authService';
 
+const TOKEN_STORAGE_KEY = 'token';
+const USER_STORAGE_KEY = 'user';
+
+const getStoredToken = () => {
+    if (typeof window === 'undefined') {
+        return null;
+    }
+
+    return localStorage.getItem(TOKEN_STORAGE_KEY);
+};
+
+const getStoredUser = () => {
+    if (typeof window === 'undefined') {
+        return null;
+    }
+
+    const storedUser = localStorage.getItem(USER_STORAGE_KEY);
+    if (!storedUser) {
+        return null;
+    }
+
+    try {
+        return JSON.parse(storedUser);
+    } catch (error) {
+        console.error('Failed to parse stored user', error);
+        localStorage.removeItem(USER_STORAGE_KEY);
+        return null;
+    }
+};
+
+const persistSession = (token, user) => {
+    if (typeof window === 'undefined') {
+        return;
+    }
+
+    localStorage.setItem(TOKEN_STORAGE_KEY, token);
+    if (user) {
+        localStorage.setItem(USER_STORAGE_KEY, JSON.stringify(user));
+    } else {
+        localStorage.removeItem(USER_STORAGE_KEY);
+    }
+};
+
+const clearPersistedSession = () => {
+    if (typeof window === 'undefined') {
+        return;
+    }
+
+    localStorage.removeItem(TOKEN_STORAGE_KEY);
+    localStorage.removeItem(USER_STORAGE_KEY);
+};
+
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-    const [user, setUser] = useState(null);
-    const [token, setToken] = useState(localStorage.getItem('token'));
+    const [user, setUser] = useState(() => getStoredUser());
+    const [token, setToken] = useState(() => getStoredToken());
 
     useEffect(() => {
-        const storedToken = localStorage.getItem('token');
-        if (storedToken) {
-            authService.getProfile(storedToken)
-                .then(response => {
-                    setUser(response.data);
-                    setToken(storedToken);
-                })
-                .catch(error => {
-                    console.error('Error fetching user profile', error);
-                    logout();
-                });
+        const storedToken = getStoredToken();
+        if (!storedToken) {
+            return;
         }
+
+        const hydrateSession = async () => {
+            try {
+                const response = await authService.getProfile(storedToken);
+                setUser(response.data);
+                setToken(storedToken);
+                persistSession(storedToken, response.data);
+            } catch (error) {
+                console.error('Error fetching user profile', error);
+                clearPersistedSession();
+                setUser(null);
+                setToken(null);
+            }
+        };
+
+        hydrateSession();
     }, []);
 
     const login = async (email, password) => {
         const response = await authService.login(email, password);
-        const token = response.data.token;
-        setToken(token);
-        localStorage.setItem('token', token);
-        
-        // Fetch user profile after login
-        const userProfile = await authService.getProfile(token);
-        setUser(userProfile.data);
+        const { access_token: accessToken, user: loggedUser } = response.data || {};
+
+        if (!accessToken) {
+            throw new Error('No se recibió el token de acceso.');
+        }
+
+        setToken(accessToken);
+
+        let userData = loggedUser;
+        if (!userData) {
+            const profileResponse = await authService.getProfile(accessToken);
+            userData = profileResponse.data;
+        }
+
+        setUser(userData);
+        persistSession(accessToken, userData);
+
+        return userData;
     };
 
     const logout = async () => {
@@ -39,16 +110,12 @@ export const AuthProvider = ({ children }) => {
                 await authService.logout(token);
             } catch (error) {
                 console.error('Error logging out', error);
-            } finally {
-                setToken(null);
-                setUser(null);
-                localStorage.removeItem('token');
             }
-        } else {
-            setToken(null);
-            setUser(null);
-            localStorage.removeItem('token');
         }
+
+        setToken(null);
+        setUser(null);
+        clearPersistedSession();
     };
     
     const register = async (name, email, password) => {

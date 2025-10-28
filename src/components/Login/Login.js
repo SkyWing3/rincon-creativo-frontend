@@ -1,7 +1,6 @@
 import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthContext';
-import authService from '../../services/authService';
 import './Login.css';
 
 const Login = () => {
@@ -14,22 +13,22 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
-    authService.login(email, password)
-      .then(response => {
-        alert('Login successful!');
-      })
-      .catch(error => {
-        let errorMessage = 'Login failed';
-        if (error.response) {
-          errorMessage += `: ${error.response.data.message || error.response.statusText}`;
-        } else if (error.request) {
-          errorMessage += ': No response from server';
-        } else {
-          errorMessage += `: ${error.message}`;
-        }
-        alert(errorMessage);
-        setError(errorMessage);
-      });
+    try {
+      await login(email, password);
+      alert('Login successful!');
+      navigate('/profile');
+    } catch (error) {
+      let errorMessage = 'Login failed';
+      if (error.response) {
+        errorMessage += `: ${error.response.data.message || error.response.statusText}`;
+      } else if (error.request) {
+        errorMessage += ': No response from server';
+      } else {
+        errorMessage += `: ${error.message}`;
+      }
+      alert(errorMessage);
+      setError(errorMessage);
+    }
   };
 
   return (
