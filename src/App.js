@@ -9,6 +9,7 @@ import Landing from './components/Landing/Landing';
 import Catalog from './components/Catalog/Catalog';
 import ShoppingCart from './components/ShoppingCart/ShoppingCart';
 import Checkout from './components/Checkout/Checkout';
+import Analytics from './components/Analytics/Analytics';
 import { AuthContext } from './context/AuthContext';
 import Footer from './components/Footer/Footer';
 import './App.css';
@@ -69,6 +70,7 @@ function App() {
 
     return (
         <Router>
+            <Analytics />
             <div className="app-container">
                 <div className="content-wrap">
                     <Main 
