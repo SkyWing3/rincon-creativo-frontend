@@ -1,55 +1,90 @@
 
-
-import React, { useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import './Orders.css';
 import OrderDetail from '../OrderDetail/OrderDetail';
 
-const Orders = ({ show, onClose }) => {
+const STATUS_CLASS_MAP = {
+  delivered: 'status-completed',
+  completed: 'status-completed',
+  pending: 'status-pending',
+  processing: 'status-pending',
+  cancelled: 'status-cancelled',
+  canceled: 'status-cancelled',
+};
+
+const translateStatus = (status) => {
+  if (!status) {
+    return 'Desconocido';
+  }
+
+  const normalized = status.toLowerCase();
+  switch (normalized) {
+    case 'delivered':
+    case 'completed':
+      return 'Entregado';
+    case 'pending':
+    case 'processing':
+      return 'Pendiente';
+    case 'cancelled':
+    case 'canceled':
+      return 'Cancelado';
+    default:
+      return status;
+  }
+};
+
+const formatCurrency = (amount) => {
+  if (amount === null || amount === undefined) {
+    return 'Bs 0.00';
+  }
+
+  const value = typeof amount === 'number' ? amount : parseFloat(amount);
+  if (Number.isNaN(value)) {
+    return `Bs ${amount}`;
+  }
+
+  return `Bs ${value.toFixed(2)}`;
+};
+
+const formatDate = (isoString) => {
+  if (!isoString) {
+    return 'Fecha no disponible';
+  }
+
+  const date = new Date(isoString);
+  if (Number.isNaN(date.getTime())) {
+    return isoString;
+  }
+
+  return date.toLocaleDateString('es-BO', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  });
+};
+
+const Orders = ({ show, onClose, orders = [] }) => {
   const [selectedOrder, setSelectedOrder] = useState(null);
 
-  // Mock data - replace with data from your endpoint
-  const orders = [
-    {
-      id: '#12345',
-      date: '2024-01-15',
-      total: '150.00 Bs',
-      status: 'Completado',
-      products: [
-        { id: 1, name: 'Producto 1', quantity: 2, price: 50, image: 'https://via.placeholder.com/60' },
-        { id: 2, name: 'Producto 2', quantity: 1, price: 50, image: 'https://via.placeholder.com/60' },
-      ],
-    },
-    {
-      id: '#12346',
-      date: '2024-02-20',
-      total: '200.00 Bs',
-      status: 'Pendiente',
-      products: [
-        { id: 3, name: 'Producto 3', quantity: 4, price: 50, image: 'https://via.placeholder.com/60' },
-      ],
-    },
-    {
-      id: '#12347',
-      date: '2024-03-10',
-      total: '75.50 Bs',
-      status: 'Cancelado',
-      products: [
-        { id: 4, name: 'Producto 4', quantity: 1, price: 75.50, image: 'https://via.placeholder.com/60' },
-      ],
-    },
-  ];
+  const safeOrders = useMemo(() => (Array.isArray(orders) ? orders : []), [orders]);
+
+  useEffect(() => {
+    if (!show) {
+      setSelectedOrder(null);
+    }
+  }, [show]);
+
+  useEffect(() => {
+    setSelectedOrder(null);
+  }, [safeOrders]);
 
   const getStatusClass = (status) => {
-    switch (status) {
-      case 'Completado':
-        return 'status-completed';
-      case 'Pendiente':
-        return 'status-pending';
-      case 'Cancelado':
-        return 'status-cancelled';
-      default:
-        return '';
+    if (!status) {
+      return '';
     }
+
+    const normalized = status.toLowerCase();
+    return STATUS_CLASS_MAP[normalized] || '';
   };
 
   if (!show) {
@@ -75,20 +110,26 @@ const Orders = ({ show, onClose }) => {
               <h1>Mis Pedidos</h1>
               <button onClick={onClose} className="close-btn">×</button>
             </div>
-            <div className="orders-list">
-              {orders.map(order => (
-                <div key={order.id} className="order-item" onClick={() => handleOrderClick(order)} style={{cursor: 'pointer'}}>
-                  <div className="order-details">
-                    <span>Pedido {order.id}</span>
-                    <p>Fecha: {order.date}</p>
-                    <p>Total: {order.total}</p>
+            {safeOrders.length === 0 ? (
+              <div className="orders-list">
+                <p className="orders-empty">No tienes pedidos registrados todavía.</p>
+              </div>
+            ) : (
+              <div className="orders-list">
+                {safeOrders.map(order => (
+                  <div key={order.id} className="order-item" onClick={() => handleOrderClick(order)} style={{cursor: 'pointer'}}>
+                    <div className="order-details">
+                      <span>Pedido #{order.id}</span>
+                      <p>Fecha: {formatDate(order.created_at)}</p>
+                      <p>Total: {formatCurrency(order.total_amount)}</p>
+                    </div>
+                    <div className={`order-status ${getStatusClass(order.state)}`}>
+                      {translateStatus(order.state)}
+                    </div>
                   </div>
-                  <div className={`order-status ${getStatusClass(order.status)}`}>
-                    {order.status}
-                  </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            )}
           </>
         )}
       </div>

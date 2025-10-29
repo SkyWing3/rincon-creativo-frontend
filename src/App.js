@@ -10,6 +10,7 @@ import Catalog from './components/Catalog/Catalog';
 import ShoppingCart from './components/ShoppingCart/ShoppingCart';
 import Checkout from './components/Checkout/Checkout';
 import Analytics from './components/Analytics/Analytics';
+import AdminPage from './components/Admin/AdminPage';
 import { AuthContext } from './context/AuthContext';
 import Footer from './components/Footer/Footer';
 import './App.css';
@@ -83,6 +84,7 @@ function App() {
                         <Route path="/catalog" element={<Catalog onAddToCart={handleAddToCart} />} />
                         <Route path="/login" element={<Login />} />
                         <Route path="/register" element={<Register />} />
+                        <Route path="/admin" element={<AdminPage />} />
                         <Route
                             path="/profile"
                             element={
@@ -112,4 +114,3 @@ function App() {
 }
 
 export default App;
-

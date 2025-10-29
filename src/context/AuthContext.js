@@ -82,7 +82,13 @@ export const AuthProvider = ({ children }) => {
         hydrateSession();
     }, []);
 
-    const login = async (email, password) => {
+    const createSession = (accessToken, userData) => {
+        setToken(accessToken);
+        setUser(userData);
+        persistSession(accessToken, userData);
+    };
+
+    const authenticate = async (email, password) => {
         const response = await authService.login(email, password);
         const { access_token: accessToken, user: loggedUser } = response.data || {};
 
@@ -90,17 +96,29 @@ export const AuthProvider = ({ children }) => {
             throw new Error('No se recibió el token de acceso.');
         }
 
-        setToken(accessToken);
-
         let userData = loggedUser;
         if (!userData) {
             const profileResponse = await authService.getProfile(accessToken);
             userData = profileResponse.data;
         }
 
-        setUser(userData);
-        persistSession(accessToken, userData);
+        return { accessToken, userData };
+    };
 
+    const login = async (email, password) => {
+        const { accessToken, userData } = await authenticate(email, password);
+        createSession(accessToken, userData);
+        return userData;
+    };
+
+    const adminLogin = async (email, password) => {
+        const { accessToken, userData } = await authenticate(email, password);
+
+        if (!userData || userData.role === 'client') {
+            throw new Error('Acceso no autorizado para administradores.');
+        }
+
+        createSession(accessToken, userData);
         return userData;
     };
 
@@ -124,7 +142,7 @@ export const AuthProvider = ({ children }) => {
     };
 
     return (
-        <AuthContext.Provider value={{ user, token, login, logout, register, setUser }}>
+        <AuthContext.Provider value={{ user, token, login, adminLogin, logout, register, setUser }}>
             {children}
         </AuthContext.Provider>
     );
