@@ -84,6 +84,25 @@
   gap: 3rem;
 }
 
+.catalog-status,
+.catalog-error {
+  grid-column: 1 / -1;
+  text-align: center;
+  font-size: 1.1rem;
+  padding: 2rem 1rem;
+  border-radius: 12px;
+}
+
+.catalog-status {
+  background-color: #f9fafb;
+  color: #555;
+}
+
+.catalog-error {
+  background-color: #fee2e2;
+  color: #b91c1c;
+}
+
 .product-card {
   background-color: #fff;
   border-radius: 15px;
