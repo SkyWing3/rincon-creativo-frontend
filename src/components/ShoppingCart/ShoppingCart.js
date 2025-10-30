@@ -1,9 +1,48 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useContext, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { AuthContext } from '../../context/AuthContext';
 import './ShoppingCart.css';
 
-const ShoppingCart = ({ cartItems, onRemoveFromCart, onUpdateQuantity }) => {
+const ShoppingCart = ({ cartItems, onRemoveFromCart, onUpdateQuantity, onCheckout }) => {
+    const { token } = useContext(AuthContext);
+    const navigate = useNavigate();
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [checkoutError, setCheckoutError] = useState(null);
     const hasItems = Array.isArray(cartItems) && cartItems.length > 0;
+
+    const handleFinalizePurchase = async () => {
+        if (isSubmitting) {
+            return;
+        }
+
+        setCheckoutError(null);
+
+        if (!token) {
+            navigate('/login');
+            return;
+        }
+
+        if (!hasItems) {
+            setCheckoutError('No hay productos en el carrito.');
+            return;
+        }
+
+        if (typeof onCheckout !== 'function') {
+            navigate('/checkout');
+            return;
+        }
+
+        try {
+            setIsSubmitting(true);
+            await onCheckout();
+            navigate('/checkout');
+        } catch (error) {
+            const message = error?.message || 'No se pudo finalizar la compra.';
+            setCheckoutError(message);
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
 
     return (
         <div className="shopping-cart-container">
@@ -43,10 +82,16 @@ const ShoppingCart = ({ cartItems, onRemoveFromCart, onUpdateQuantity }) => {
                             );
                         })}
                     </ul>
+                    {checkoutError && <p className="cart-error">{checkoutError}</p>}
                     <div className="cart-actions">
-                        <Link to="/checkout" className="pay-btn">
-                            Finalizar Compra
-                        </Link>
+                        <button
+                            type="button"
+                            className="pay-btn"
+                            onClick={handleFinalizePurchase}
+                            disabled={!hasItems || isSubmitting}
+                        >
+                            {isSubmitting ? 'Procesando...' : 'Finalizar Compra'}
+                        </button>
                     </div>
                 </>
             )}

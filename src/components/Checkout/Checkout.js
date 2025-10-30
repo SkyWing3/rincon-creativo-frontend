@@ -3,10 +3,8 @@ import './Checkout.css';
 import { AuthContext } from '../../context/AuthContext';
 import authService from '../../services/authService';
 
-const Checkout = ({ cartItems = [] }) => {
+const Checkout = ({ cartItems = [], orderDetails = null, orderError = null }) => {
     const { user, token } = useContext(AuthContext);
-    const [razonSocial, setRazonSocial] = useState('');
-    const [nit, setNit] = useState('');
     const [profile, setProfile] = useState(user || null);
     const [isLoadingProfile, setIsLoadingProfile] = useState(false);
     const [profileError, setProfileError] = useState(null);
@@ -64,6 +62,9 @@ const Checkout = ({ cartItems = [] }) => {
         );
     }
 
+    const hasOrder = Boolean(orderDetails);
+    const paymentInstructions = orderDetails?.payment_instructions;
+
     return (
         <div className="checkout-container">
             <h2>Finalizar Compra</h2>
@@ -109,32 +110,6 @@ const Checkout = ({ cartItems = [] }) => {
                     )}
                 </div>
 
-                <div className="billing-data">
-                    <h3>Datos de Facturación</h3>
-                    <form>
-                        <div className="form-group">
-                            <label htmlFor="razonSocial">Razón Social</label>
-                            <input
-                                type="text"
-                                id="razonSocial"
-                                value={razonSocial}
-                                onChange={(event) => setRazonSocial(event.target.value)}
-                                placeholder="Nombre o razón social"
-                            />
-                        </div>
-                        <div className="form-group">
-                            <label htmlFor="nit">NIT o Carnet de Identidad</label>
-                            <input
-                                type="text"
-                                id="nit"
-                                value={nit}
-                                onChange={(event) => setNit(event.target.value)}
-                                placeholder="Ingresa tu NIT o CI"
-                            />
-                        </div>
-                    </form>
-                </div>
-
                 <div className="cart-summary">
                     <h3>Resumen del Carrito</h3>
                     {!hasItems && (
@@ -160,19 +135,46 @@ const Checkout = ({ cartItems = [] }) => {
                             <span>Bs {cartTotal.toFixed(2)}</span>
                         </div>
                     )}
-                    <div className="payment-method">
-                        <h4>Método de Pago</h4>
-                        <div className="binance-pay">
-                            <img
-                                src="https://img.icons8.com/fluency/48/binance.png"
-                                alt="Binance Pay"
-                            />
-                            <span>Binance Pay</span>
-                        </div>
-                    </div>
-                    <button className="place-order-btn" disabled={!hasItems}>
-                        {hasItems ? 'Realizar Pedido' : 'Agrega productos para continuar'}
-                    </button>
+                    {orderError && <p className="checkout-error">{orderError}</p>}
+                    {!hasOrder && !orderError && (
+                        <p className="checkout-status">
+                            Genera una orden desde el carrito para ver las instrucciones de pago.
+                        </p>
+                    )}
+                    {hasOrder && (
+                        <>
+                            <div className="order-details">
+                                <h4>Detalles de la Orden</h4>
+                                <p>
+                                    <strong>ID de la orden:</strong> {orderDetails.order_id}
+                                </p>
+                                <p>
+                                    <strong>Estado:</strong> {orderDetails.state}
+                                </p>
+                                <p>
+                                    <strong>Monto total:</strong> {orderDetails.total_amount} {orderDetails.asset}
+                                </p>
+                            </div>
+                            {paymentInstructions && (
+                                <div className="payment-instructions">
+                                    <h4>Instrucciones de Pago</h4>
+                                    <p>
+                                        <strong>Activo:</strong> {paymentInstructions.asset}
+                                    </p>
+                                    <p>
+                                        <strong>Monto a pagar:</strong> {paymentInstructions.usdt_amount} {paymentInstructions.asset}
+                                    </p>
+                                    <p>
+                                        <strong>Red:</strong> {paymentInstructions.network}
+                                    </p>
+                                    <p>
+                                        <strong>Dirección:</strong> {paymentInstructions.usdt_address}
+                                    </p>
+                                    <p className="payment-note">{paymentInstructions.note}</p>
+                                </div>
+                            )}
+                        </>
+                    )}
                 </div>
             </div>
         </div>

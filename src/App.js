@@ -13,6 +13,7 @@ import Analytics from './components/Analytics/Analytics';
 import AdminPage from './components/Admin/AdminPage';
 import { AuthContext } from './context/AuthContext';
 import Footer from './components/Footer/Footer';
+import orderService from './services/orderService';
 import './App.css';
 
 const PrivateRoute = ({ children }) => {
@@ -23,6 +24,9 @@ const PrivateRoute = ({ children }) => {
 function App() {
     const [cartItems, setCartItems] = useState([]);
     const [notification, setNotification] = useState(null);
+    const [orderDetails, setOrderDetails] = useState(null);
+    const [orderError, setOrderError] = useState(null);
+    const { user, token } = useContext(AuthContext);
 
     useEffect(() => {
         const storedCartItems = JSON.parse(localStorage.getItem('cartItems'));
@@ -69,6 +73,50 @@ function App() {
         setNotification(null);
     };
 
+    const handleCreateOrder = async () => {
+        if (!token || !user) {
+            throw new Error('Debes iniciar sesión para finalizar la compra.');
+        }
+
+        const userId = user.id ?? user.user_id;
+
+        if (!userId) {
+            throw new Error('No se encontró la información del usuario.');
+        }
+
+        if (!cartItems.length) {
+            throw new Error('No hay productos en el carrito.');
+        }
+
+        const payload = {
+            user_id: userId,
+            items: cartItems.map((item) => ({
+                product_id: item.id,
+                quantity: item.quantity || 0,
+                unit_price: Number(item.price) || 0,
+                unit_discount: Number(
+                    item.unit_discount ?? item.discount ?? 0
+                ),
+            })),
+        };
+
+        try {
+            setOrderError(null);
+            const response = await orderService.createOrder(payload, token);
+            const data = response?.data || response;
+            setOrderDetails(data);
+            return data;
+        } catch (error) {
+            console.error('Error creating order', error);
+            const message =
+                error?.response?.data?.detail ||
+                error?.response?.data?.message ||
+                'No se pudo crear la orden. Intenta nuevamente.';
+            setOrderError(message);
+            throw new Error(message);
+        }
+    };
+
     return (
         <Router>
             <Analytics />
@@ -95,13 +143,20 @@ function App() {
                         />
                         <Route
                             path="/cart"
-                            element={<ShoppingCart cartItems={cartItems} onRemoveFromCart={handleRemoveFromCart} onUpdateQuantity={handleUpdateQuantity} />}
+                            element={
+                                <ShoppingCart
+                                    cartItems={cartItems}
+                                    onRemoveFromCart={handleRemoveFromCart}
+                                    onUpdateQuantity={handleUpdateQuantity}
+                                    onCheckout={handleCreateOrder}
+                                />
+                            }
                         />
                         <Route
                             path="/checkout"
                             element={
                                 <PrivateRoute>
-                                    <Checkout cartItems={cartItems} />
+                                    <Checkout cartItems={cartItems} orderDetails={orderDetails} orderError={orderError} />
                                 </PrivateRoute>
                             }
                         />

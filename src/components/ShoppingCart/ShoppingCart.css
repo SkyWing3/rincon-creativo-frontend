@@ -127,6 +127,17 @@
   background-color: #218838;
 }
 
+.pay-btn:disabled {
+  background-color: #94d3a2;
+  cursor: not-allowed;
+}
+
+.cart-error {
+  color: #dc3545;
+  margin: 10px 0 0;
+  text-align: right;
+}
+
 .cart-empty {
   text-align: center;
   color: #555;

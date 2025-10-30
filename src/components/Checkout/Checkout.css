@@ -15,14 +15,14 @@
   gap: 2rem;
 }
 
-.user-data, .billing-data, .cart-summary {
+.user-data, .cart-summary {
   background-color: #fff;
   padding: 2rem;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.user-data h3, .billing-data h3, .cart-summary h3 {
+.user-data h3, .cart-summary h3 {
   margin-top: 0;
   margin-bottom: 1.5rem;
   color: #333;
@@ -76,60 +76,6 @@
   color: #333;
 }
 
-.payment-method {
-  margin-top: 2rem;
-}
-
-.payment-method h4 {
-  margin-bottom: 1rem;
-  color: #333;
-}
-
-.binance-pay {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  padding: 1rem;
-  background-color: #f5f5f5;
-  border-radius: 4px;
-}
-
-.binance-pay img {
-  width: 48px;
-  height: 48px;
-}
-
-.binance-pay span {
-  font-size: 1.1rem;
-  font-weight: bold;
-  color: #333;
-}
-
-.place-order-btn {
-  display: block;
-  width: 100%;
-  padding: 1rem;
-  margin-top: 2rem;
-  background-color: #007bff;
-  color: #fff;
-  border: none;
-  border-radius: 4px;
-  font-size: 1.2rem;
-  font-weight: bold;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.place-order-btn:hover {
-  background-color: #0056b3;
-}
-
-.place-order-btn:disabled {
-  background-color: #d1d5db;
-  color: #6b7280;
-  cursor: not-allowed;
-}
-
 .checkout-status,
 .checkout-error {
   margin: 0;
@@ -149,5 +95,37 @@
 }
 
 .checkout-status + .checkout-status {
+  margin-top: 1rem;
+}
+
+.order-details,
+.payment-instructions {
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #eee;
+}
+
+.order-details h4,
+.payment-instructions h4 {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  color: #333;
+}
+
+.order-details p,
+.payment-instructions p {
+  margin: 0.5rem 0;
+  color: #555;
+}
+
+.payment-instructions p strong {
+  color: #333;
+}
+
+.payment-note {
+  background-color: #fef3c7;
+  color: #92400e;
+  padding: 0.75rem 1rem;
+  border-radius: 6px;
   margin-top: 1rem;
 }
