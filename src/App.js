@@ -101,7 +101,7 @@ function App() {
                             path="/checkout"
                             element={
                                 <PrivateRoute>
-                                    <Checkout />
+                                    <Checkout cartItems={cartItems} />
                                 </PrivateRoute>
                             }
                         />

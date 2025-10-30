@@ -107,15 +107,9 @@
   background-color: #c82333;
 }
 
-.cart-total {
+.cart-actions {
   margin-top: 30px;
   text-align: right;
-}
-
-.cart-total h3 {
-  font-size: 24px;
-  color: #333;
-  transition: color 0.3s ease;
 }
 
 .pay-btn {
@@ -131,6 +125,12 @@
 
 .pay-btn:hover {
   background-color: #218838;
+}
+
+.cart-empty {
+  text-align: center;
+  color: #555;
+  font-size: 1.1rem;
 }
 
 @media screen and (max-width: 768px) {

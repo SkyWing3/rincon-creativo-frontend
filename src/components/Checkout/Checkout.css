@@ -123,3 +123,31 @@
 .place-order-btn:hover {
   background-color: #0056b3;
 }
+
+.place-order-btn:disabled {
+  background-color: #d1d5db;
+  color: #6b7280;
+  cursor: not-allowed;
+}
+
+.checkout-status,
+.checkout-error {
+  margin: 0;
+  padding: 1rem;
+  border-radius: 6px;
+  font-size: 0.95rem;
+}
+
+.checkout-status {
+  background-color: #f3f4f6;
+  color: #4b5563;
+}
+
+.checkout-error {
+  background-color: #fee2e2;
+  color: #b91c1c;
+}
+
+.checkout-status + .checkout-status {
+  margin-top: 1rem;
+}
