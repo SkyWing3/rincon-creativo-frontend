@@ -90,7 +90,7 @@ const ShoppingCart = ({ cartItems, onRemoveFromCart, onUpdateQuantity, onCheckou
                             onClick={handleFinalizePurchase}
                             disabled={!hasItems || isSubmitting}
                         >
-                            {isSubmitting ? 'Procesando...' : 'Finalizar Compra'}
+                            {isSubmitting ? 'Procesando...' : 'Comprar'}
                         </button>
                     </div>
                 </>

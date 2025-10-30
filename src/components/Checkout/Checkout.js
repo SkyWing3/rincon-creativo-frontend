@@ -143,18 +143,6 @@ const Checkout = ({ cartItems = [], orderDetails = null, orderError = null }) =>
                     )}
                     {hasOrder && (
                         <>
-                            <div className="order-details">
-                                <h4>Detalles de la Orden</h4>
-                                <p>
-                                    <strong>ID de la orden:</strong> {orderDetails.order_id}
-                                </p>
-                                <p>
-                                    <strong>Estado:</strong> {orderDetails.state}
-                                </p>
-                                <p>
-                                    <strong>Monto total:</strong> {orderDetails.total_amount} {orderDetails.asset}
-                                </p>
-                            </div>
                             {paymentInstructions && (
                                 <div className="payment-instructions">
                                     <h4>Instrucciones de Pago</h4>
@@ -171,6 +159,14 @@ const Checkout = ({ cartItems = [], orderDetails = null, orderError = null }) =>
                                         <strong>Dirección:</strong> {paymentInstructions.usdt_address}
                                     </p>
                                     <p className="payment-note">{paymentInstructions.note}</p>
+                                    <a
+                                        className="binance-link"
+                                        href="https://www.binance.com"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                    >
+                                        Ir a Binance Pay
+                                    </a>
                                 </div>
                             )}
                         </>
