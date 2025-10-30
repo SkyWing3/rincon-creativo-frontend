@@ -30,10 +30,10 @@ const SideDrawer = ({ show, click, cartItemCount }) => {
           <Link to="/catalog">Catálogo</Link>
         </li>
         <li>
-          <Link to="/login">Login</Link>
+          <Link to="/login">Iniciar sesión</Link>
         </li>
         <li>
-          <Link to="/signup">Signup</Link>
+          <Link to="/register">Registrarse</Link>
         </li>
         <li>
           <Link to="/cart" className="sidedrawer__button cart">
@@ -41,7 +41,7 @@ const SideDrawer = ({ show, click, cartItemCount }) => {
           </Link>
         </li>
         <li>
-          <Link to="/login" className="sidedrawer__button profile">
+          <Link to="/profile" className="sidedrawer__button profile">
             <FaUser /> Perfil
           </Link>
         </li>

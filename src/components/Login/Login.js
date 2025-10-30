@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthContext';
 import './Login.css';
 
@@ -15,16 +15,23 @@ const Login = () => {
     setError(null);
     try {
       await login(email, password);
-      alert('Login successful!');
+      alert('Sesión iniciada correctamente.');
       navigate('/profile');
     } catch (error) {
-      let errorMessage = 'Login failed';
-      if (error.response) {
-        errorMessage += `: ${error.response.data.message || error.response.statusText}`;
-      } else if (error.request) {
-        errorMessage += ': No response from server';
+      let errorMessage = 'Error al iniciar sesión';
+      const serverMessage =
+        error?.response?.data?.message ||
+        error?.response?.data?.detail ||
+        error?.response?.data?.error;
+
+      if (serverMessage) {
+        errorMessage += `: ${serverMessage}`;
+      } else if (error?.response) {
+        errorMessage += ` (código ${error.response.status})`;
+      } else if (error?.request) {
+        errorMessage += ': No se recibió respuesta del servidor.';
       } else {
-        errorMessage += `: ${error.message}`;
+        errorMessage += '.';
       }
       alert(errorMessage);
       setError(errorMessage);
@@ -62,7 +69,7 @@ const Login = () => {
           <button type="submit" className="login-btn">Iniciar Sesión</button>
         </form>
         <p className="signup-link">
-          ¿No tienes una cuenta? <a href="/signup">Regístrate</a>
+          ¿No tienes una cuenta? <Link to="/register">Regístrate</Link>
         </p>
       </div>
     </div>

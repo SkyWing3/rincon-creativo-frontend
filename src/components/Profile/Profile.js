@@ -143,7 +143,7 @@ const Profile = () => {
     <div className="profile-container">
       <div className="profile-card">
         <div className="profile-sidebar">
-          <img src={displayedUser?.profilePicture || DEFAULT_PROFILE_PICTURE} alt="Profile" className="profile-picture" />
+          <img src={displayedUser?.profilePicture || DEFAULT_PROFILE_PICTURE} alt="Perfil" className="profile-picture" />
           <h2>{`${displayedUser?.nombre || ''} ${displayedUser?.apellidoPaterno || ''}`.trim()}</h2>
           <p>{displayedUser?.correo || 'Sin correo disponible'}</p>
         </div>

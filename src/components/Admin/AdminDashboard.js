@@ -21,7 +21,27 @@ const ROLE_OPTIONS = ['client', 'admin', 'fulfillment'];
 const ROLE_LABELS = {
     client: 'Cliente',
     admin: 'Administrador',
-    fulfillment: 'Fulfillment',
+    fulfillment: 'Logística',
+};
+
+const ORDER_STATUS_LABELS = {
+    delivered: 'Entregado',
+    completed: 'Entregado',
+    pending: 'Pendiente',
+    processing: 'Pendiente',
+    cancelled: 'Cancelado',
+    canceled: 'Cancelado',
+};
+
+const translateOrderStatus = (status) => {
+    if (!status) {
+        return 'N/D';
+    }
+    const normalized = String(status).toLowerCase();
+    if (ORDER_STATUS_LABELS[normalized]) {
+        return ORDER_STATUS_LABELS[normalized];
+    }
+    return status;
 };
 
 const AdminDashboard = () => {
@@ -827,7 +847,9 @@ const AdminDashboard = () => {
                                     <tr key={order.id}>
                                         <td>{order.id}</td>
                                         <td>{resolveOrderCustomer(order)}</td>
-                                        <td className="admin-capitalize">{order.status || order.state || 'N/D'}</td>
+                                        <td className="admin-capitalize">
+                                            {translateOrderStatus(order.status || order.state)}
+                                        </td>
                                         <td>{formatCurrency(order.total ?? order.total_amount ?? order.amount)}</td>
                                         <td>{formatPercentage(order.global_discount)}</td>
                                         <td>{formatDate(order.created_at || order.createdAt)}</td>

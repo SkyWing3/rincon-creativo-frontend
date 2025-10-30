@@ -47,12 +47,12 @@ const Navbar = ({ cartItemCount }) => {
             <>
               <li className="nav-item">
                 <Link to="/profile" className="nav-links">
-                  Profile
+                  Perfil
                 </Link>
               </li>
               <li className="nav-item">
                 <a href="/" onClick={logout} className="nav-links">
-                  Logout
+                  Cerrar sesión
                 </a>
               </li>
             </>
@@ -60,12 +60,12 @@ const Navbar = ({ cartItemCount }) => {
             <>
               <li className="nav-item">
                 <Link to="/login" className="nav-links">
-                  Login
+                  Iniciar sesión
                 </Link>
               </li>
               <li className="nav-item">
                 <Link to="/register" className="nav-links">
-                  Register
+                  Registrarse
                 </Link>
               </li>
             </>
