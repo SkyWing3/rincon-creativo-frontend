@@ -48,6 +48,14 @@ const deleteCategory = (token, categoryId) => {
     return axios.delete(`${API_URL}/categories/${categoryId}`, withAuthHeaders(token));
 };
 
+const updateUserRole = (token, userId, role) => {
+    return axios.patch(
+        `${API_URL}/users/${userId}/role`,
+        { role },
+        withAuthHeaders(token),
+    );
+};
+
 const adminService = {
     getUsers,
     getOrders,
@@ -59,6 +67,7 @@ const adminService = {
     createCategory,
     updateCategory,
     deleteCategory,
+    updateUserRole,
 };
 
 export default adminService;

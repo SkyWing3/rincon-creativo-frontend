@@ -17,6 +17,13 @@ const initialCategoryFormState = {
     descripcion: '',
 };
 
+const ROLE_OPTIONS = ['client', 'admin', 'fulfillment'];
+const ROLE_LABELS = {
+    client: 'Cliente',
+    admin: 'Administrador',
+    fulfillment: 'Fulfillment',
+};
+
 const AdminDashboard = () => {
     const { user, token, logout } = useContext(AuthContext);
     const [users, setUsers] = useState([]);
@@ -33,6 +40,9 @@ const AdminDashboard = () => {
     const [isSavingCategory, setIsSavingCategory] = useState(false);
     const [editingProductId, setEditingProductId] = useState(null);
     const [editingCategoryId, setEditingCategoryId] = useState(null);
+    const [roleSelections, setRoleSelections] = useState({});
+    const [savingUserRoles, setSavingUserRoles] = useState({});
+    const [userFeedback, setUserFeedback] = useState(null);
 
     const resolveErrorMessage = (err, fallback) => {
         const serverMessage =
@@ -60,7 +70,7 @@ const AdminDashboard = () => {
         setIsLoading(true);
         setError(null);
         try {
-            const [usersResponse, ordersResponse, productsResponse, categoriesResponse] = await Promise.all([
+            const [usersResult, ordersResult, productsResult, categoriesResult] = await Promise.allSettled([
                 adminService.getUsers(token),
                 adminService.getOrders(token),
                 adminService.getProducts(token),
@@ -77,10 +87,65 @@ const AdminDashboard = () => {
                 return [];
             };
 
-            setUsers(resolveList(usersResponse.data));
-            setOrders(resolveList(ordersResponse.data));
-            setProducts(resolveList(productsResponse.data));
-            setCategories(resolveList(categoriesResponse.data));
+            const errors = [];
+
+            if (usersResult.status === 'fulfilled') {
+                setUsers(resolveList(usersResult.value.data));
+            } else {
+                setUsers([]);
+                errors.push(
+                    `Usuarios: ${resolveErrorMessage(
+                        usersResult.reason,
+                        'No se pudieron obtener los usuarios.',
+                    )}`,
+                );
+            }
+            setRoleSelections({});
+            setSavingUserRoles({});
+
+            if (ordersResult.status === 'fulfilled') {
+                setOrders(resolveList(ordersResult.value.data));
+            } else {
+                setOrders([]);
+                errors.push(
+                    `Pedidos: ${resolveErrorMessage(
+                        ordersResult.reason,
+                        'No se pudieron obtener los pedidos.',
+                    )}`,
+                );
+            }
+
+            if (productsResult.status === 'fulfilled') {
+                setProducts(resolveList(productsResult.value.data));
+            } else {
+                setProducts([]);
+                errors.push(
+                    `Productos: ${resolveErrorMessage(
+                        productsResult.reason,
+                        'No se pudieron obtener los productos.',
+                    )}`,
+                );
+            }
+
+            if (categoriesResult.status === 'fulfilled') {
+                setCategories(resolveList(categoriesResult.value.data));
+            } else {
+                setCategories([]);
+                errors.push(
+                    `Categorías: ${resolveErrorMessage(
+                        categoriesResult.reason,
+                        'No se pudieron obtener las categorías.',
+                    )}`,
+                );
+            }
+
+            if (errors.length === 0) {
+                setError(null);
+            } else if (errors.length === 4) {
+                setError(`No se pudieron obtener los datos administrativos. ${errors.join(' ')}`);
+            } else {
+                setError(errors.join(' '));
+            }
         } catch (err) {
             setError(resolveErrorMessage(err, 'No se pudieron obtener los datos administrativos.'));
         } finally {
@@ -123,6 +188,17 @@ const AdminDashboard = () => {
             return record.name || record.username || 'N/D';
         }
         return slots.join(' ');
+    };
+
+    const resolveUserRole = (record) => {
+        if (!record) {
+            return 'client';
+        }
+        const rawRole = (record.role || record.rol || '').toLowerCase();
+        if (ROLE_OPTIONS.includes(rawRole)) {
+            return rawRole;
+        }
+        return 'client';
     };
 
     const formatCurrency = (value) => {
@@ -177,6 +253,98 @@ const AdminDashboard = () => {
             return `ID ${product.category_id}`;
         }
         return 'N/D';
+    };
+
+    const handleRoleSelectChange = (userId, newRole) => {
+        if (!ROLE_OPTIONS.includes(newRole)) {
+            return;
+        }
+        const userRecord = users.find((item) => item.id === userId);
+        const currentRole = resolveUserRole(userRecord);
+        setUserFeedback(null);
+        if (newRole === currentRole) {
+            setRoleSelections((prev) => {
+                const { [userId]: _, ...rest } = prev;
+                return rest;
+            });
+            return;
+        }
+        setRoleSelections((prev) => ({
+            ...prev,
+            [userId]: newRole,
+        }));
+    };
+
+    const handleUpdateUserRole = async (userId) => {
+        if (!token) {
+            setUserFeedback({
+                type: 'error',
+                message: 'No se encontró un token de autenticación válido.',
+            });
+            return;
+        }
+        const userRecord = users.find((item) => item.id === userId);
+        if (!userRecord) {
+            setUserFeedback({
+                type: 'error',
+                message: 'No se pudo identificar al usuario seleccionado.',
+            });
+            return;
+        }
+        const currentRole = resolveUserRole(userRecord);
+        const selectedRole = roleSelections[userId];
+        const nextRole = selectedRole ?? currentRole;
+        if (!ROLE_OPTIONS.includes(nextRole)) {
+            setUserFeedback({
+                type: 'error',
+                message: 'Selecciona un rol válido antes de continuar.',
+            });
+            return;
+        }
+        if (nextRole === currentRole) {
+            setUserFeedback({
+                type: 'error',
+                message: 'Selecciona un rol diferente para poder actualizar.',
+            });
+            return;
+        }
+        setSavingUserRoles((prev) => ({
+            ...prev,
+            [userId]: true,
+        }));
+        setUserFeedback(null);
+        try {
+            await adminService.updateUserRole(token, userId, nextRole);
+            setUsers((prev) =>
+                prev.map((item) =>
+                    item.id === userId
+                        ? {
+                              ...item,
+                              role: nextRole,
+                              rol: nextRole,
+                          }
+                        : item,
+                ),
+            );
+            setUserFeedback({
+                type: 'success',
+                message: `Rol actualizado a ${ROLE_LABELS[nextRole] || nextRole} correctamente.`,
+            });
+            setRoleSelections((prev) => {
+                const { [userId]: _, ...rest } = prev;
+                return rest;
+            });
+        } catch (err) {
+            setUserFeedback({
+                type: 'error',
+                message: resolveErrorMessage(err, 'No se pudo actualizar el rol del usuario.'),
+            });
+        } finally {
+            setSavingUserRoles((prev) => {
+                const { [userId]: _, ...rest } = prev;
+                return rest;
+            });
+        }
     };
 
     const handleProductInputChange = ({ target }) => {
@@ -551,6 +719,15 @@ const AdminDashboard = () => {
                         <span className="admin-section-status">{users.length} usuarios</span>
                     )}
                 </div>
+                {userFeedback && (
+                    <p
+                        className={`admin-feedback ${
+                            userFeedback.type === 'error' ? 'error' : 'success'
+                        }`}
+                    >
+                        {userFeedback.message}
+                    </p>
+                )}
                 {!isLoading && users.length === 0 && !error && (
                     <p className="admin-section-empty">No se encontraron usuarios.</p>
                 )}
@@ -569,17 +746,51 @@ const AdminDashboard = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {users.map((record) => (
-                                    <tr key={record.id}>
-                                        <td>{record.id}</td>
-                                        <td>{formatFullName(record)}</td>
-                                        <td>{record.email || 'N/D'}</td>
-                                        <td className="admin-capitalize">{record.role || record.rol || 'N/D'}</td>
-                                        <td>{record.phone || 'N/D'}</td>
-                                        <td>{record.departamento || 'N/D'}</td>
-                                        <td>{record.registrado_el || formatDate(record.created_at || record.createdAt)}</td>
-                                    </tr>
-                                ))}
+                                {users.map((record) => {
+                                    const currentRole = resolveUserRole(record);
+                                    const pendingRole = roleSelections[record.id] ?? currentRole;
+                                    const isSavingRole = Boolean(savingUserRoles[record.id]);
+                                    const hasPendingChange = pendingRole !== currentRole;
+                                    return (
+                                        <tr key={record.id}>
+                                            <td>{record.id}</td>
+                                            <td>{formatFullName(record)}</td>
+                                            <td>{record.email || 'N/D'}</td>
+                                            <td>
+                                                <div className="admin-role-control">
+                                                    <select
+                                                        className="admin-role-select"
+                                                        value={pendingRole}
+                                                        onChange={(event) =>
+                                                            handleRoleSelectChange(record.id, event.target.value)
+                                                        }
+                                                        disabled={isSavingRole}
+                                                    >
+                                                        {ROLE_OPTIONS.map((role) => (
+                                                            <option key={role} value={role}>
+                                                                {ROLE_LABELS[role] || role}
+                                                            </option>
+                                                        ))}
+                                                    </select>
+                                                    <button
+                                                        type="button"
+                                                        className="admin-secondary admin-role-save"
+                                                        onClick={() => handleUpdateUserRole(record.id)}
+                                                        disabled={!hasPendingChange || isSavingRole}
+                                                    >
+                                                        {isSavingRole ? 'Guardando...' : 'Actualizar'}
+                                                    </button>
+                                                </div>
+                                            </td>
+                                            <td>{record.phone || 'N/D'}</td>
+                                            <td>{record.departamento || 'N/D'}</td>
+                                            <td>
+                                                {record.registrado_el ||
+                                                    formatDate(record.created_at || record.createdAt)}
+                                            </td>
+                                        </tr>
+                                    );
+                                })}
                             </tbody>
                         </table>
                     </div>
